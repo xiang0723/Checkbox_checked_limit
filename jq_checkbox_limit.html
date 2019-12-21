@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<title>jq_checkbox_limit</title></head>
+<style type="text/css">
+  .checkbox_group_limit .checkbox_counts:before{content: "已選取 ";}
+  .checkbox_group_limit .checkbox_row{display: inline-block;}
+  .checkbox_group_limit .checkbox_row input[type="checkbox"], .checkbox_row label{cursor: pointer;}
+  .checkbox_group_limit .show_message{color: red; margin: 0 0 0 10px;}
+</style>
+<body>
+<div id="checkbox_group_0" class="checkbox_group_limit" limit="4">
+  <h3>最多選 <span class="limit">N</span> <span class="checkbox_counts"></span><span class="show_message"></span></h3>
+  <div class="checkbox_row"><input type="checkbox" value="選項1"><label >選項1</label></div>
+  <div class="checkbox_row"><input type="checkbox" value="選項2"><label >選項2</label></div>
+  <div class="checkbox_row"><input type="checkbox" value="選項3"><label >選項3</label></div>
+  <div class="checkbox_row"><input type="checkbox" value="選項4"><label >選項4</label></div>
+  <div class="checkbox_row"><input type="checkbox" value="選項5"><label >選項5</label></div>
+  <div class="checkbox_row"><input type="checkbox" value="選項6"><label >選項6</label></div>
+</div>
+<hr>
+<div id="checkbox_group_1" class="checkbox_group_limit" limit="3">
+  <h3>最多選 <span class="limit">N</span> <span class="checkbox_counts"></span><span class="show_message"></span></h3>
+  <div class="checkbox_row"><input type="checkbox" value="選項1"><label >選項1</label></div>
+  <div class="checkbox_row"><input type="checkbox" value="選項2"><label >選項2</label></div>
+  <div class="checkbox_row"><input type="checkbox" value="選項3"><label >選項3</label></div>
+  <div class="checkbox_row"><input type="checkbox" value="選項4"><label >選項4</label></div>
+  <div class="checkbox_row"><input type="checkbox" value="選項5"><label >選項5</label></div>
+  <div class="checkbox_row"><input type="checkbox" value="選項6"><label >選項6</label></div>
+</div>
+<hr>
+<div id="checkbox_group_aaa" class="checkbox_group_limit" limit="1">
+  <h3>最多選 <span class="limit">N</span> <span class="checkbox_counts"></span><span class="show_message"></span></h3>
+  <div class="checkbox_row"><input type="checkbox" value="選項1"><label >選項1</label></div>
+  <div class="checkbox_row"><input type="checkbox" value="選項2"><label >選項2</label></div>
+  <div class="checkbox_row"><input type="checkbox" value="選項3"><label >選項3</label></div>
+  <div class="checkbox_row"><input type="checkbox" value="選項4"><label >選項4</label></div>
+  <div class="checkbox_row"><input type="checkbox" value="選項5"><label >選項5</label></div>
+  <div class="checkbox_row"><input type="checkbox" value="選項6"><label >選項6</label></div>
+</div>
+<script type="text/javascript">
+
+function set_checkbox_group()
+{
+  //判斷是否有 checkbox_group
+  if($(".checkbox_group_limit").length > 0)
+  {
+    //每一個 checkbox_group 的處理與判斷
+    $(".checkbox_group_limit").each(function()
+    {
+      //顯示 checkbox_group 已選取計數的元素
+      var checkbox_counts = $(this).find(".checkbox_counts");
+      checkbox_counts.html("0");
+      //顯示 checkbox_group 訊息的元素
+      var show_message = $(this).find(".show_message");
+      //顯示 checkbox_group 群組選取上限
+      var select_limit = $(this).attr("limit");
+      $(this).find(".limit").html(select_limit);
+      //設定 checkbox_group 內每一個 name 值
+      var checkbox_name = $(this).attr("id") + "[]";
+      $(this).find("input[type=checkbox]").attr("name", checkbox_name);
+      //設定 checkbox_group 內每一個 checkbox id 值
+      var i = 0;
+      var checkbox_list = "input[name$='" + checkbox_name + "']";
+      $(checkbox_list).each(function()
+      {
+        $(this).attr("id", checkbox_name + "_" + i);
+        $(this).next("label").attr("for", checkbox_name + "_" + i);
+        i++;
+      });
+      //checkbox_group 內 checkbox 選取時進行判斷
+      $(checkbox_list).on('change', function(evt)
+      {
+        var checkbox_list_checked = checkbox_list + ":checked";
+        //計算已選取的計數
+        checkbox_counts.html($(checkbox_list_checked).length);
+        //判斷達到選取上限時
+        if($(checkbox_list_checked).length > select_limit)
+        {
+          checkbox_counts.html($(checkbox_list_checked).length - 1);
+          this.checked = false;
+          show_message.html("超過選取數量");
+          setTimeout(function () {
+            show_message.html("");
+          }, 2000); //等待 N 豪秒
+        }
+      });
+    });
+  }
+}
+$(function () {
+  set_checkbox_group();
+});
+
+
+
+
+</script>
+</body>
+</html>
