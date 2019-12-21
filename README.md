@@ -1,7 +1,7 @@
 # Checkbox_checked_limit
 使用 jQuery 來控制 Checkbox 選取上限
 
-範例：(PHP P)
+範例：
 https://blias.com/xiang/demo/jq_checkbox_limit/
 
 # 使用說明
